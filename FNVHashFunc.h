@@ -1,11 +1,11 @@
-#ifndef HASHFUNC_H
-#define HASHFUNC_H
+#ifndef FNVHASHFUNC_H
+#define FNVHASHFUNC_H
+#include <string>
 #include "HashFunc.h"
 
 class FNVHashFunc : public HashFunc
 {
 public:
-    virtual unsigned GetKey(std::string key) override;
+    unsigned GetKey(std::string key);
 };
-
 #endif
