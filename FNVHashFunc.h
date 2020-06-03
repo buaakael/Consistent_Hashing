@@ -1,6 +1,6 @@
 #ifndef FNVHASHFUNC_H
 #define FNVHASHFUNC_H
-#include <string>
+//#include <string>
 #include "HashFunc.h"
 
 class FNVHashFunc : public HashFunc
