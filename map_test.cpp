@@ -4,6 +4,7 @@
 //#include <string>
 #include "HashFunc.h"
 #include "FNVHashFunc.h"
+#include <sstream>
 
 void printVector(const std::vector<unsigned> &key, const std::vector<std::string> &value)
 {
@@ -28,10 +29,14 @@ int main()
     std::map<unsigned, std::string> m_mapping;
     std::vector<std::string> node = {"192.168.1.1", "192.168.1.2", "192.168.1.3", "192.168.1.4", "192.168.1.5", "192.168.1.6", "192.168.1.7"};
     std::vector<std::string> file;
-    std::string str("abcedfghijklmnopqrstuvwxyz");
-    for (int i = 0; i < 26; ++i)
+    std::stringstream ss;
+    std::string file_name;
+    for (int i = 0; i < 10000; ++i)
     {
-        file.push_back(str[i] + std::string(".csv"));
+        ss << i + 1 << ".csv";
+        ss >> file_name;
+        ss.clear();
+        file.push_back(file_name);
     }
     std::vector<unsigned> node_key;
     std::vector<unsigned> file_key;
