@@ -16,7 +16,7 @@ int main()
     std::string file_name;
     std::set<unsigned> hash_set;
     std::cout << "创建文件名数组" << std::endl;
-    for (int i = 0; i < 10000; ++i)
+    for (int i = 0; i < 100000; ++i)
     {
         ss << i + 1 << ".csv";
         ss >> file_name;
