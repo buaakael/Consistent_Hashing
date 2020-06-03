@@ -24,9 +24,15 @@ int main()
     //建立存储节点与一致性哈希ID对应的pair
     std::map<unsigned, unsigned> m_save;
     //建立ID与文件名对应的pair
+    std::map<unsigned, std::string> m_node;
     std::map<unsigned, std::string> m_mapping;
-    std::vector<std::string> node = {"192.168.1.1", "192.168.1.2", "192.168.1.3", "192.168.1.4"};
-    std::vector<std::string> file = {"a.csv", "b.csv", "数据1.txt", "数据2.txt"};
+    std::vector<std::string> node = {"192.168.1.1", "192.168.1.2", "192.168.1.3", "192.168.1.4", "192.168.1.5", "192.168.1.6", "192.168.1.7"};
+    std::vector<std::string> file;
+    std::string str("abcedfghijklmnopqrstuvwxyz");
+    for (int i = 0; i < 26; ++i)
+    {
+        file.push_back(str[i] + std::string(".csv"));
+    }
     std::vector<unsigned> node_key;
     std::vector<unsigned> file_key;
     //用哈希函数生成ID
@@ -43,18 +49,14 @@ int main()
     {
         m_save.insert(std::make_pair(node_key[i], 0));
     }
-    for (auto it = m_save.begin(); it != m_save.end(); ++it)
+    for (int i = 0; i < node_key.size(); ++i)
     {
-        std::cout << it->first << " " << it->second << std::endl;
+        m_node.insert(std::make_pair(node_key[i], node[i]));
     }
 
     for (int i = 0; i < file_key.size(); ++i)
     {
         m_mapping.insert(std::make_pair(file_key[i], file[i]));
-    }
-    for (auto it = m_mapping.begin(); it != m_mapping.end(); ++it)
-    {
-        std::cout << it->first << " " << it->second << std::endl;
     }
     auto it_node = m_save.begin();
     auto it_file = m_mapping.begin();
@@ -82,8 +84,9 @@ int main()
     }
     printVector(node_key, node);
     printVector(file_key, file);
+    std::cout << std::endl;
     for (auto it = m_save.begin(); it != m_save.end(); ++it)
     {
-        std::cout << it->first << " " << it->second << std::endl;
+        std::cout << m_node[it->first] << " " << it->second << std::endl;
     }
 }
