@@ -52,6 +52,9 @@ bool ConsistentHash::addRealNode(Node *node)
     unsigned key = hashFunc->GetKey(value);
     realNode.push_back(node);
     allNode.insert(std::make_pair(key, value));
+    //自己修改的，标记一下
+    node2File.insert(std::make_pair(value, 0));
+    
     return true;
 }
 
@@ -159,6 +162,70 @@ Node* ConsistentHash::findRealNode(std::string &nodeName)
     return node;
 }
 
+bool ConsistentHash::addFile(std::string fileName)
+{
+    if (fileName.size() == 0)
+    {
+        return false;
+    }
+    std::string serName;
+    unsigned fileKey = hashFunc->GetKey(fileName);
+    allFile.insert(std::make_pair(fileKey, fileName));
+    auto it = allNode.begin();
+    while (it != allNode.end())
+    {
+        if (fileKey < it->first)
+        {
+            serName = it->second;
+            break;
+        }
+        ++it;
+    }
+    if (it == allNode.end())
+    {
+        serName = allNode.begin()->second;
+    }
+    node2File[serName]++;
+    return true;
+}
+
+bool ConsistentHash::delFile(std::string fileName)
+{
+    std::string serName;
+    unsigned fileKey = hashFunc->GetKey(fileName);
+    int count = allFile.count(fileKey);
+    if (count == 0)
+    {
+        return false;
+    }
+    auto delIt = allFile.find(fileKey);
+    while (delIt != allFile.end() && count--)
+    {
+        if (delIt->second == fileName)
+        {
+            allFile.erase(delIt);
+            break;
+        }
+        ++delIt;
+    }
+    auto it = allNode.begin();
+    while (it != allNode.end())
+    {
+        if (fileKey < it->first)
+        {
+            serName = it->second;
+            break;
+        }
+        ++it;
+    }
+    if (it == allNode.end())
+    {
+        serName = allNode.begin()->second;
+    }
+    node2File[serName]--;
+    return true;
+}
+
 std::string ConsistentHash::getServerName(std::string fileName)
 {
     //根据文件名找到其存储的节点
@@ -179,6 +246,16 @@ std::string ConsistentHash::getServerName(std::string fileName)
         serName = allNode.begin()->second;
     }
     return serName;
+}
+
+std::string ConsistentHash::showLoadCondition()
+{
+    std::ostringstream oss;
+    for (auto it = node2File.begin(); it != node2File.end(); ++it)
+    {
+        oss << "node : " << it->first << "\tload : " << it->second << "\n"; 
+    }
+    return oss.str();
 }
 
 int ConsistentHash::getVirNum(std::string serName)
@@ -206,7 +283,7 @@ int ConsistentHash::getAllNodeNum()
     return allNode.size();
 }
 
-std::string ConsistentHash::showTime()
+std::string ConsistentHash::showNode()
 {
     std::ostringstream oss;
     for (auto it = allNode.begin(); it != allNode.end(); ++it)
@@ -216,6 +293,15 @@ std::string ConsistentHash::showTime()
     return oss.str();
 }
 
+std::string ConsistentHash::showFile()
+{
+    std::ostringstream oss;
+    for (auto it = allFile.begin(); it != allFile.end(); ++it)
+    {
+        oss << "key : " << it->first << "\tvalue : " << it->second << "\n"; 
+    }
+    return oss.str();
+}
 
 
 

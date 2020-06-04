@@ -15,10 +15,18 @@ class ConsistentHash
 public:
     ConsistentHash(HashFunc *func = nullptr);
     ~ConsistentHash();
+    //增加新的存储节点
     bool addNode(std::string nodeName, int vNum);
+    //删除现有存储节点
     bool delNode(std::string nodeName);
-    //根据client找对应的server
-    std::string getServerName(std::string cliName);
+    //导入文件进行存储
+    bool addFile(std::string fileName);
+    //删除存储的文件
+    bool delFile(std::string fileName);
+    //查询单个文件存储在那个节点上
+    std::string getServerName(std::string fileName);
+    //获取节点负载情况
+    std::string showLoadCondition();
     //获取真实节点个数
     int getRealNum();
     //获取某个真实节点的虚拟节点个数
@@ -26,7 +34,9 @@ public:
     //获取所有节点数量
     int getAllNodeNum();
     //打印节点
-    std::string showTime();
+    std::string showNode();
+    //打印文件
+    std::string showFile();
 private:
     bool addRealNode(Node *node);
     bool addVirNode(Node *node);
@@ -37,7 +47,7 @@ private:
 private:
     std::multimap<unsigned, std::string> allNode;//保存哈希值与存储节点的映射
     std::multimap<unsigned, std::string> allFile;//保存哈希值与文件的映射
-    std::multimap<unsigned, unsigned> node2File;//保存存储节点与对应存储文件数的关系
+    std::map<std::string, unsigned> node2File;//保存存储节点与对应存储文件数的关系
     std::list<Node *> realNode;
     HashFunc *hashFunc;
 };
