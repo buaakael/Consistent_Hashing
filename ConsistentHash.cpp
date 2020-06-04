@@ -40,6 +40,8 @@ bool ConsistentHash::delNode(std::string nodeName)
         return false;
     if (!delVirNode(node))
         return false;
+    auto it = node2File.find(node->GetNodeName());
+    node2File.erase(it);
     delete node;
     return true;
 }

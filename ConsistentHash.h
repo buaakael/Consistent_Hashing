@@ -33,9 +33,9 @@ public:
     int getVirNum(std::string serName);
     //获取所有节点数量
     int getAllNodeNum();
-    //打印节点
+    //打印节点信息
     std::string showNode();
-    //打印文件
+    //打印文件信息
     std::string showFile();
 private:
     bool addRealNode(Node *node);
