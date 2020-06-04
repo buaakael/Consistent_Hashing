@@ -47,7 +47,8 @@ private:
 private:
     std::multimap<unsigned, std::string> allNode;//保存哈希值与存储节点的映射
     std::multimap<unsigned, std::string> allFile;//保存哈希值与文件的映射
-    std::map<std::string, unsigned> node2File;//保存存储节点与对应存储文件数的关系
+    std::multimap<unsigned, std::string> fileAtNode;//保存文件的哈希值与文件存储节点的映射
+    std::map<std::string, unsigned> nodeLoad;//保存存储节点与对应存储文件数的关系
     std::list<Node *> realNode;
     HashFunc *hashFunc;
 };

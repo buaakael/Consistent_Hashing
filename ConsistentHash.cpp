@@ -40,8 +40,8 @@ bool ConsistentHash::delNode(std::string nodeName)
         return false;
     if (!delVirNode(node))
         return false;
-    auto it = node2File.find(node->GetNodeName());
-    node2File.erase(it);
+    auto it = nodeLoad.find(node->GetNodeName());
+    nodeLoad.erase(it);
     delete node;
     return true;
 }
@@ -55,7 +55,7 @@ bool ConsistentHash::addRealNode(Node *node)
     realNode.push_back(node);
     allNode.insert(std::make_pair(key, value));
     //自己修改的，标记一下
-    node2File.insert(std::make_pair(value, 0));
+    nodeLoad.insert(std::make_pair(value, 0));
     
     return true;
 }
@@ -187,7 +187,8 @@ bool ConsistentHash::addFile(std::string fileName)
     {
         serName = allNode.begin()->second;
     }
-    node2File[serName]++;
+    nodeLoad[serName]++;
+    fileAtNode.insert(std::make_pair(fileKey, serName));
     return true;
 }
 
@@ -210,21 +211,24 @@ bool ConsistentHash::delFile(std::string fileName)
         }
         ++delIt;
     }
-    auto it = allNode.begin();
-    while (it != allNode.end())
-    {
-        if (fileKey < it->first)
-        {
-            serName = it->second;
-            break;
-        }
-        ++it;
-    }
-    if (it == allNode.end())
-    {
-        serName = allNode.begin()->second;
-    }
-    node2File[serName]--;
+    auto delIt2 = fileAtNode.find(fileKey);
+    serName = delIt2->second;
+    fileAtNode.erase(delIt2);
+    //auto it = allNode.begin();
+    //while (it != allNode.end())
+    //{
+    //    if (fileKey < it->first)
+    //    {
+    //        serName = it->second;
+    //        break;
+    //    }
+    //    ++it;
+    //}
+    //if (it == allNode.end())
+    //{
+    //    serName = allNode.begin()->second;
+    //}
+    nodeLoad[serName]--;
     return true;
 }
 
@@ -253,7 +257,7 @@ std::string ConsistentHash::getServerName(std::string fileName)
 std::string ConsistentHash::showLoadCondition()
 {
     std::ostringstream oss;
-    for (auto it = node2File.begin(); it != node2File.end(); ++it)
+    for (auto it = nodeLoad.begin(); it != nodeLoad.end(); ++it)
     {
         oss << "node : " << it->first << "\tload : " << it->second << "\n"; 
     }
