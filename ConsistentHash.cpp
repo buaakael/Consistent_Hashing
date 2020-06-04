@@ -164,7 +164,7 @@ std::string ConsistentHash::getServerName(std::string fileName)
     //根据文件名找到其存储的节点
     std::string serName;
     unsigned fileKey = hashFunc->GetKey(fileName);
-    auto it = allNode.beign();
+    auto it = allNode.begin();
     while (it != allNode.end())
     {
         if (fileKey < it->first)

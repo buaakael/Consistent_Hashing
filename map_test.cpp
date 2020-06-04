@@ -4,6 +4,7 @@
 //#include <string>
 #include "HashFunc.h"
 #include "FNVHashFunc.h"
+#include "ConsistentHash.h"
 #include <sstream>
 
 void printVector(const std::vector<unsigned> &key, const std::vector<std::string> &value)
