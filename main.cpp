@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     {
         cssHash.addNode(*it, 100);
     }
-    for (int i = 0; i < 10000; ++i)
+    for (int i = 0; i < 100000; ++i)
     {
         ss << i + 1 << ".csv";
         ss >> fileName;
@@ -35,5 +35,6 @@ int main(int argc, char* argv[])
     cssHash.delNode("192.168.1.1");
     std::cout << cssHash.showLoadCondition() << std::endl;
     std::cout << cssHash.getAllNodeNum() << std::endl;
+    //std::cout << cssHash.showFileAtNode() << std::endl;
     return 0;
 }

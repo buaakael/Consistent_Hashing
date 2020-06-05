@@ -37,6 +37,8 @@ public:
     std::string showNode();
     //打印文件信息
     std::string showFile();
+    //打印文件所在节点信息
+    std::string showFileAtNode();
 private:
     bool addRealNode(Node *node);
     bool addVirNode(Node *node);
@@ -47,7 +49,7 @@ private:
 private:
     std::multimap<unsigned, std::string> allNode;//保存哈希值与存储节点的映射
     std::multimap<unsigned, std::string> allFile;//保存哈希值与文件的映射
-    std::multimap<unsigned, std::string> fileAtNode;//保存文件的哈希值与文件存储节点的映射
+    std::multimap<std::string, std::string> fileAtNode;//保存文件名与文件存储节点的映射
     std::map<std::string, unsigned> nodeLoad;//保存存储节点与对应存储文件数的关系
     std::list<Node *> realNode;
     HashFunc *hashFunc;

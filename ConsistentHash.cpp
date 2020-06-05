@@ -28,6 +28,12 @@ bool ConsistentHash::addNode(std::string nodeName, int vNum)
         return false;
     if (!addRealNode(node))
         return false;
+    //auto it = allFile.begin();
+    //auto itn = allNode.begin();
+    //while (it != allFile.end() && itn != allNode.end())
+    //{
+    //    if (
+    //}
     return true;
 }
 
@@ -41,7 +47,15 @@ bool ConsistentHash::delNode(std::string nodeName)
     if (!delVirNode(node))
         return false;
     auto it = nodeLoad.find(node->GetNodeName());
+    //unsigned count = it->second;
     nodeLoad.erase(it);
+    for (auto itadd = fileAtNode.begin(); itadd != fileAtNode.end(); ++itadd)
+    {
+        if (itadd->second == nodeName)
+        {
+            addFile(itadd->first);
+        }
+    } 
     delete node;
     return true;
 }
@@ -188,7 +202,7 @@ bool ConsistentHash::addFile(std::string fileName)
         serName = allNode.begin()->second;
     }
     nodeLoad[serName]++;
-    fileAtNode.insert(std::make_pair(fileKey, serName));
+    fileAtNode.insert(std::make_pair(fileName, serName));
     return true;
 }
 
@@ -211,7 +225,7 @@ bool ConsistentHash::delFile(std::string fileName)
         }
         ++delIt;
     }
-    auto delIt2 = fileAtNode.find(fileKey);
+    auto delIt2 = fileAtNode.find(fileName);
     serName = delIt2->second;
     fileAtNode.erase(delIt2);
     //auto it = allNode.begin();
@@ -309,6 +323,15 @@ std::string ConsistentHash::showFile()
     return oss.str();
 }
 
+std::string ConsistentHash::showFileAtNode()
+{
+    std::ostringstream oss;
+    for (auto it = fileAtNode.begin(); it != fileAtNode.end(); ++it)
+    {
+        oss << "file : " << it->first << "\tvalue : " << it->second << "\n"; 
+    }
+    return oss.str();
+}
 
 
 
